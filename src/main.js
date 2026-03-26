@@ -17,6 +17,7 @@ const btnloadMore = document.querySelector('.js-btn-load');
 let page = 1;
 let query = '';
 let totalHits = 0;
+const perPage = 15;
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
@@ -39,29 +40,34 @@ form.addEventListener('submit', async e => {
       iziToast.error({
         message:
           'Sorry, there are no images matching your search query. Please try again!',
+        position: 'topRight',
         messageColor: '#fafafb',
         backgroundColor: '#ef4040',
-        position: 'topRight',
       });
       return;
     }
 
     createGallery(data.hits);
+
     if (totalHits > perPage) {
       showLoadMoreButton();
     }
-    if (page * 15 >= totalHits) {
+
+    if (page * perPage >= totalHits) {
       hideLoadMoreButton();
-      iziToast.error({
-        message: `We're sorry, but you've reached the end of search results.`,
+      iziToast.info({
+        message: "We're sorry, but you've reached the end of search results.",
         position: 'topRight',
       });
     }
-        form.reset();
+
+    form.reset();
   } catch (error) {
     iziToast.error({
       message: 'Something went wrong!',
       position: 'topRight',
+      messageColor: '#fafafb',
+      backgroundColor: '#ef4040',
     });
   } finally {
     hideLoader();
@@ -89,7 +95,7 @@ btnloadMore.addEventListener('click', async () => {
       behavior: 'smooth',
     });
 
-    if (page * 15 >= totalHits) {
+    if (page * perPage >= totalHits) {
       hideLoadMoreButton();
       iziToast.info({
         message: "We're sorry, but you've reached the end of search results.",
@@ -100,6 +106,8 @@ btnloadMore.addEventListener('click', async () => {
     iziToast.error({
       message: 'Error loading more images',
       position: 'topRight',
+      messageColor: '#fafafb',
+      backgroundColor: '#ef4040',
     });
   } finally {
     hideLoader();
