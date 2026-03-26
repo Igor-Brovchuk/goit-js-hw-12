@@ -47,7 +47,9 @@ form.addEventListener('submit', async e => {
     }
 
     createGallery(data.hits);
-    showLoadMoreButton();
+    if (totalHits > perPage) {
+      showLoadMoreButton();
+    }
     if (page * 15 >= totalHits) {
       hideLoadMoreButton();
       iziToast.error({
@@ -55,6 +57,7 @@ form.addEventListener('submit', async e => {
         position: 'topRight',
       });
     }
+        form.reset();
   } catch (error) {
     iziToast.error({
       message: 'Something went wrong!',
@@ -62,7 +65,6 @@ form.addEventListener('submit', async e => {
     });
   } finally {
     hideLoader();
-    form.reset();
   }
 });
 
